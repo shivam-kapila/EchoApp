@@ -13,9 +13,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
@@ -257,9 +255,31 @@ class SongPlayingFragment : Fragment() {
         mAcceleration = 0.0f
         mAccelerationCurrent = SensorManager.GRAVITY_EARTH
         mAccelerationLast = SensorManager.GRAVITY_EARTH
+
         bindShakeListener()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.song_playing_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?) {
+        super.onPrepareOptionsMenu(menu)
+        val item: MenuItem? = menu?.findItem(R.id.action_redirect)
+        item?.isVisible = true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_redirect -> {
+                Statified.myActivity?.onBackPressed()
+                return false
+            }
+        }
+        return false
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
