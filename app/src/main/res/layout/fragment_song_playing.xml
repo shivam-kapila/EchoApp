@@ -46,12 +46,12 @@
         android:background="#9d2a58"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/information_song">
-            
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
              android:layout_height="wrap_content"
              android:id="@+id/seekBarLayout"
              android:layout_below="@+id/information_song">
-             
+
              <SeekBar
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"

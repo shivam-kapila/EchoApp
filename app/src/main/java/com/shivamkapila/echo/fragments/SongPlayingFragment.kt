@@ -114,9 +114,9 @@ class SongPlayingFragment : Fragment() {
                  }
              }
              if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-                 Statified.fab?.setBackgroundResource(R.drawable.favorite_on)
+                 Statified.fab?.setImageResource(R.drawable.favorite_on)
              } else {
-                 Statified.fab?.setBackgroundResource(R.drawable.favorite_off)
+                 Statified.fab?.setImageResource(R.drawable.favorite_off)
              }
          }
 
@@ -179,9 +179,9 @@ class SongPlayingFragment : Fragment() {
                  e.printStackTrace()
              }
              if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-                 Statified.fab?.setBackgroundResource(R.drawable.favorite_on)
+                 Statified.fab?.setImageResource(R.drawable.favorite_on)
              } else {
-                 Statified.fab?.setBackgroundResource(R.drawable.favorite_off)
+                 Statified.fab?.setImageResource(R.drawable.favorite_off)
              }
 
          }
@@ -209,7 +209,6 @@ class SongPlayingFragment : Fragment() {
         Statified.songArtistView = view?.findViewById(R.id.songArtist)
         Statified.songTitleView = view?.findViewById(R.id.songTitle)
         Statified.fab = view?.findViewById(R.id.favoriteIcon)
-        Statified.fab?.setBackgroundResource(R.drawable.white_circle_icon)
         Statified.fab?.alpha = 0.8f
         Statified.glView = view?.findViewById(R.id.visualizer_view)
 
@@ -296,13 +295,16 @@ class SongPlayingFragment : Fragment() {
             e.printStackTrace()
         }
         var fromFavBottomBar = arguments.get("FavBottomBar") as? String
+        var fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
         if (fromFavBottomBar != null) {
             Statified.mediaPlayer = FavoriteFragment.Statified.mediaPlayer
+        }else if (fromMainScreenBottomBar != null) {
+            Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
         } else {
+            Statified.mediaPlayer?.reset()
             Statified.mediaPlayer = MediaPlayer()
             Statified.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
             try {
-                Statified.mediaPlayer?.reset()
                 Statified.mediaPlayer?.setDataSource(Statified.myActivity, Uri.parse(path))
                 Statified.mediaPlayer?.prepare()
             } catch (e: Exception) {
@@ -311,21 +313,7 @@ class SongPlayingFragment : Fragment() {
 
             Statified.mediaPlayer?.start()
         }
-        var fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
-        if (fromMainScreenBottomBar != null) {
-            Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
-        } else {
-            Statified.mediaPlayer = MediaPlayer()
-            Statified.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
-            try {
-                Statified.mediaPlayer?.reset()
-                Statified.mediaPlayer?.setDataSource(Statified.myActivity, Uri.parse(path))
-                Statified.mediaPlayer?.prepare()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-            Statified.mediaPlayer?.start()
-        }
+
         Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
         if (Statified.currentSongHelper?.isPlaying as Boolean) {
             Statified.playPauseImageButton?.setBackgroundResource(R.drawable.pause_icon)
@@ -338,7 +326,7 @@ class SongPlayingFragment : Fragment() {
         clickHandler()
         var visualisationHandler =DbmHandler.Factory.newVisualizerHandler(Statified.myActivity as Context,0)
         Statified.audioVisualisation?.linkTo(visualisationHandler)
-        Statified.fab?.setBackgroundResource(R.drawable.white_circle_icon)
+        Statified.fab?.setImageResource(R.drawable.white_circle_icon)
 
         var prefsForShuffle = Statified.myActivity?.getSharedPreferences(Staticated.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE)
         var isShuffleAllowed = prefsForShuffle?.getBoolean("feature", false)
@@ -363,9 +351,9 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.isLoop = false
         }
         if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-            Statified.fab?.setBackgroundResource(R.drawable.favorite_on)
+            Statified.fab?.setImageResource(R.drawable.favorite_on)
         } else {
-            Statified.fab?.setBackgroundResource(R.drawable.favorite_off)
+            Statified.fab?.setImageResource(R.drawable.favorite_off)
         }
     }
 
@@ -374,11 +362,11 @@ class SongPlayingFragment : Fragment() {
 
         Statified.fab?.setOnClickListener({
             if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-                Statified.fab?.setBackgroundResource(R.drawable.favorite_off)
+                Statified.fab?.setImageResource(R.drawable.favorite_off)
                 Statified.favoriteContent?.deleteFavourite(Statified.currentSongHelper?.songId?.toInt() as Int)
                 Toast.makeText(Statified.myActivity, "Removed from Favorites", Toast.LENGTH_SHORT).show()
             } else {
-                Statified.fab?.setBackgroundResource(R.drawable.favorite_on)
+                Statified.fab?.setImageResource(R.drawable.favorite_on)
                 Statified.favoriteContent?.storeAsFavorite(Statified.currentSongHelper?.songId?.toInt(), Statified.currentSongHelper?.songArtist,
                         Statified.currentSongHelper?.songTitle, Statified.currentSongHelper?.songPath)
                 Toast.makeText(Statified.myActivity, "Added to Favorites", Toast.LENGTH_SHORT).show()
@@ -493,9 +481,9 @@ class SongPlayingFragment : Fragment() {
             e.printStackTrace()
         }
         if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-            Statified.fab?.setBackgroundResource(R.drawable.favorite_on)
+            Statified.fab?.setImageResource(R.drawable.favorite_on)
         } else {
-            Statified.fab?.setBackgroundResource(R.drawable.favorite_off)
+            Statified.fab?.setImageResource(R.drawable.favorite_off)
         }
 
     }
