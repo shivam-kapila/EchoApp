@@ -255,7 +255,6 @@ class SongPlayingFragment : Fragment() {
         mAcceleration = 0.0f
         mAccelerationCurrent = SensorManager.GRAVITY_EARTH
         mAccelerationLast = SensorManager.GRAVITY_EARTH
-
         bindShakeListener()
     }
 
