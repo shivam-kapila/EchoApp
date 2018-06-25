@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 
@@ -33,9 +34,9 @@ class FavoriteFragment : Fragment() {
 
     var myActivity: Activity? = null
 
-    var noFavorites: TextView? = null
+    var noFavorites: RelativeLayout? = null
     var nowPlayingBottomBar: RelativeLayout? = null
-    var playPauseButton: ImageButton? = null
+    var playPauseButton: ImageView? = null
     var songTitle: TextView? = null
     var recyclerView: RecyclerView? = null
     var trackPosition: Int = 0

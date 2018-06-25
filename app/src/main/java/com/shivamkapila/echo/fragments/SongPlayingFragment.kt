@@ -23,8 +23,10 @@ import com.cleveroad.audiovisualization.DbmHandler
 import com.cleveroad.audiovisualization.GLAudioVisualizationView
 import com.shivamkapila.echo.CurrentSongHelper
 import com.shivamkapila.echo.R
+import com.shivamkapila.echo.R.id.seekBar
 import com.shivamkapila.echo.Songs
 import com.shivamkapila.echo.databases.EchoDatabase
+import com.shivamkapila.echo.utils.SeekBarController
 import java.sql.Time
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -385,6 +387,7 @@ class SongPlayingFragment : Fragment() {
         } else {
             Statified.fab?.setImageResource(R.drawable.favorite_off)
         }
+        seekbarHandler()
     }
 
 
@@ -479,9 +482,12 @@ class SongPlayingFragment : Fragment() {
             }
         })
 
+
+    fun onProgressChanged(progress: Int) {
+
+        }
+
     }
-
-
     fun playPrevious() {
         Statified.currentPosition = Statified.currentPosition - 1
         if (Statified.currentPosition == -1) {
@@ -544,6 +550,10 @@ class SongPlayingFragment : Fragment() {
 
             }
         }
+    }
+    fun seekbarHandler() {
+        val seekbarListener = SeekBarController()
+        Statified.seekbar?.setOnSeekBarChangeListener(seekbarListener)
     }
 
 }// Required empty public constructor

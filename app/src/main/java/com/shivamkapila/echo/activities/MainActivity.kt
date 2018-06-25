@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 intent, 0)
         trackNotificationBuilder = Notification.Builder(this)
                 .setContentTitle("A track is playing in background")
-                .setSmallIcon(R.drawable.echo_logo)
+                .setSmallIcon(R.drawable.echo_icon)
                 .setContentIntent(pIntent)
                 .setOngoing(true)
                 .setAutoCancel(true)
