@@ -195,7 +195,7 @@ class SongPlayingFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_song_playing, container, false)
-
+        setHasOptionsMenu(true)
         Statified.seekbar = view?.findViewById(R.id.seekBar)
         Statified.startTimeText = view?.findViewById(R.id.startTime)
         Statified.endTimeText = view?.findViewById(R.id.endTime)
@@ -268,6 +268,8 @@ class SongPlayingFragment : Fragment() {
         super.onPrepareOptionsMenu(menu)
         val item: MenuItem? = menu?.findItem(R.id.action_redirect)
         item?.isVisible = true
+        val item2: MenuItem? = menu?.findItem(R.id.action_sort)
+        item2?.isVisible = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
