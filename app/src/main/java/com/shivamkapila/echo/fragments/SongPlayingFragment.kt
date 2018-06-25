@@ -67,8 +67,8 @@ class SongPlayingFragment : Fragment() {
                 Statified.startTimeText?.setText(String.format("%02d:%02d",
 
                         TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long),
-                        TimeUnit.MILLISECONDS.toSeconds(getCurrent?.toLong() as Long) -
-                                TimeUnit.MILLISECONDS.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long))))
+                        (TimeUnit.MILLISECONDS.toSeconds(getCurrent?.toLong() as Long) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long)))))
                 seekbar?.setProgress(getCurrent?.toInt() as Int)
                 Handler().postDelayed(this, 1000)
             }

@@ -21,7 +21,7 @@
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
         android:paddingTop="6dp"
-        android:text="This Application has been developed by Shivam Kapila."
+        android:text="This Application has been developed by"
         android:textColor="#212121"
         android:textSize="18sp"
         android:textStyle="bold"

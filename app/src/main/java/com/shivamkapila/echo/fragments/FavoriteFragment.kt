@@ -183,13 +183,14 @@ class FavoriteFragment : Fragment() {
                     }
                 }
             }else{
-
             }
 
             if (refreshList == null) {
                 recyclerView?.visibility = View.INVISIBLE
                 noFavorites?.visibility = View.VISIBLE
             } else {
+                recyclerView?.visibility = View.VISIBLE
+                noFavorites?.visibility = View.INVISIBLE
                 val favoriteAdapter = FavoriteAdapter(refreshList as ArrayList<Songs>, myActivity as Context)
                 val mLayoutManager = LinearLayoutManager(activity)
                 recyclerView?.layoutManager = mLayoutManager
