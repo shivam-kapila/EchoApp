@@ -75,8 +75,8 @@ class SongPlayingFragment : Fragment() {
 
 
      object Staticated {
-        var MY_PREFS_SHUFFLE = "Shuffle feature"
-        var MY_PREFS_LOOP = "Loop feature"
+         var MY_PREFS_SHUFFLE = "Shuffle feature"
+         var MY_PREFS_LOOP = "Loop feature"
 
          fun onSongComplete() {
              if (Statified.currentSongHelper?.isShuffle as Boolean) {
@@ -119,8 +119,16 @@ class SongPlayingFragment : Fragment() {
          }
 
          fun updateTextViews(songtitle: String, songArtist: String) {
-             Statified.songTitleView?.setText(songtitle)
-             Statified.songArtistView?.setText(songArtist)
+             var songTitleUpdated = songtitle
+             var songArtistUpdated = songArtist
+             if (songtitle.equals("<unknown>", true)) {
+                 songTitleUpdated = "unknown"
+             }
+             if (songArtist.equals("<unknown>", true)) {
+                 songArtistUpdated = "unknown"
+             }
+             Statified.songTitleView?.setText(songTitleUpdated)
+             Statified.songArtistView?.setText(songArtistUpdated)
          }
 
          fun processInformation(mediaPlayer: MediaPlayer) {
@@ -196,6 +204,7 @@ class SongPlayingFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_song_playing, container, false)
         setHasOptionsMenu(true)
+        activity.title = "Now Playing"
         Statified.seekbar = view?.findViewById(R.id.seekBar)
         Statified.startTimeText = view?.findViewById(R.id.startTime)
         Statified.endTimeText = view?.findViewById(R.id.endTime)
@@ -418,6 +427,7 @@ class SongPlayingFragment : Fragment() {
                 Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
                 editorLoop?.putBoolean("feature", false)
             }
+            Statified.playPauseImageButton?.setBackgroundResource(R.drawable.pause_icon)
             if (Statified.currentSongHelper?.isShuffle as Boolean) {
                 Staticated.playNext("PlayNextLikeNormalShuffle")
             } else {

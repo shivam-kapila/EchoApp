@@ -30,11 +30,13 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_settings, container, false)
         shakeSwitch = view?.findViewById(R.id.switchShake)
+        activity.title = "Settings"
         return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onAttach(context: Context?) {
@@ -70,8 +72,12 @@ class SettingsFragment : Fragment() {
         })
     }
 
+
+
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
+        val item = menu?.findItem(R.id.action_sort)
+        item?.isVisible = false
     }
 
 }// Required empty public constructor

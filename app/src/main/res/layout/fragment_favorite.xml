@@ -13,13 +13,13 @@ android:clickable="true">
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/hiddenBarFavScreen"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/playPauseButton"
+            android:id="@+id/playPauseButtonFav"
             android:layout_centerVertical="true"
             android:background="@drawable/pause_icon"
             android:layout_alignParentRight="true"
@@ -46,7 +46,7 @@ android:clickable="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/songTitleMainScreen"
+            android:id="@+id/songTitleFavScreen"
             android:layout_below="@id/nowPlaying"
             android:ellipsize="end"
             android:maxLines="1"

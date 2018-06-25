@@ -52,11 +52,11 @@ class FavoriteFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout fot this fragment
         val view = inflater!!.inflate(R.layout.fragment_favorite, container, false)
-
+        activity.title = "Favorites"
         noFavorites = view?.findViewById(R.id.noFavourites)
         nowPlayingBottomBar = view.findViewById(R.id.hiddenBarFavScreen)
-        songTitle = view.findViewById(R.id.songTitle)
-        playPauseButton = view.findViewById(R.id.playPauseButton)
+        songTitle = view.findViewById(R.id.songTitleFavScreen)
+        playPauseButton = view.findViewById(R.id.playPauseButtonFav)
         recyclerView = view.findViewById(R.id.favoriteRecycler)
         return view
     }
@@ -73,6 +73,7 @@ class FavoriteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,6 +90,8 @@ class FavoriteFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
+        val item = menu?.findItem(R.id.action_sort)
+        item?.isVisible = false
     }
 
     fun getSongsFromPhone(): ArrayList<Songs> {
@@ -148,7 +151,7 @@ class FavoriteFragment : Fragment() {
             songPlayingFragment.arguments = args
             fragmentManager.beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment)
-                    .addToBackStack("SongPlayingFragment")
+                    .addToBackStack("SongPlayingFragmentFavorite")
                     .commit()
         })
 
