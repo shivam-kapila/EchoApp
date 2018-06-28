@@ -26,6 +26,7 @@ import com.cleveroad.audiovisualization.GLAudioVisualizationView
 import com.shivamkapila.echo.CurrentSongHelper
 import com.shivamkapila.echo.R
 import com.shivamkapila.echo.Songs
+import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.databases.EchoDatabase
 import com.shivamkapila.echo.utils.SeekBarController
 import java.util.*
@@ -67,7 +68,7 @@ class SongPlayingFragment : Fragment() {
         var mSensorListener: SensorEventListener? = null
 
         var MY_PREFS_NAME = "ShakeFeature"
-
+        var back: String?= null
         var updateSongTime = object : Runnable {
             override fun run() {
                 try {
@@ -481,7 +482,32 @@ class SongPlayingFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.action_redirect-> {
-                Statified.myActivity?.onBackPressed()
+                var pos =0
+                if (Statified.back.equals("Favorite",true)) {
+                    pos = 0
+                }
+                if (Statified.back.equals("MainScreen",true)) {
+                    pos =1
+                }
+                println(Statified.back)
+                if (pos == 1) {
+                    val mainScreenFragment = MainScreenFragment()
+                    (context as MainActivity).supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.details_fragment, mainScreenFragment)
+                            .addToBackStack("MainFragment")
+                            .commit()
+                }
+
+                /*The next item is the Favorites option and the fragment corresponding to it is the favorite fragment at position 1*/
+                 if (pos == 0) {
+                    val favoriteFragment = FavoriteFragment()
+                    (context as MainActivity).supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.details_fragment, favoriteFragment)
+                            .addToBackStack("FavoriteFragment")
+                            .commit()
+                }
                 return false
             }
 

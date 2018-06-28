@@ -37,6 +37,7 @@ class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Recyc
             args.putInt("songPosition", position)
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
+            SongPlayingFragment.Statified.back = "Favorite"
             if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
                 SongPlayingFragment.Statified.mediaPlayer?.pause()
                 SongPlayingFragment.Statified.mediaPlayer?.release()

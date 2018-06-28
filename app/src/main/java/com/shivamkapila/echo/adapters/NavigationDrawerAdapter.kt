@@ -44,7 +44,7 @@ class NavigationDrawerAdapter(_contentList: ArrayList<String>, _getImages: IntAr
                 (mContext as MainActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.details_fragment, favoriteFragment)
-                        .addToBackStack("FavFragment")
+                        .addToBackStack("FavoriteFragment")
                         .commit()
             }
             else if (position == 2) {
