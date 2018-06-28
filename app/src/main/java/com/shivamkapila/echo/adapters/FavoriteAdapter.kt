@@ -30,16 +30,21 @@ class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Recyc
         holder.contentHolder?.setOnClickListener({
             val songPlayingFragment = SongPlayingFragment()
             var args = Bundle()
-            args.putString("songArtist", songObject?.artist)
-            args.putString("songTitle", songObject?.songTitle)
-            args.putString("path", songObject?.songData)
-            args.putInt("SongID", songObject?.songID?.toInt() as Int)
+            args.putString("songArtist",songObject?.artist)
+            args.putString("path",songObject?.songData)
+            args.putString("songTitle",songObject?.songTitle)
+            args.putInt("songId",songObject?.songID?.toInt() as Int)
             args.putInt("songPosition", position)
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
+            if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
+                SongPlayingFragment.Statified.mediaPlayer?.pause()
+                SongPlayingFragment.Statified.mediaPlayer?.release()
+            }
             (mContext as FragmentActivity).supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.details_fragment, songPlayingFragment)
+                    .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
+                    .addToBackStack("SongPlayingFragmentFav")
                     .commit()
         })
     }

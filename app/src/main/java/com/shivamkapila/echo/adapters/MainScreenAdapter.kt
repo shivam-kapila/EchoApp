@@ -1,8 +1,10 @@
 package com.shivamkapila.echo.adapters
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +17,9 @@ import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.fragments.MainScreenFragment
 import com.shivamkapila.echo.fragments.SongPlayingFragment
 
-class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context) : RecyclerView.Adapter<MainScreenAdapter.MyViewHolder>() {
-
+class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context)
+    : RecyclerView.Adapter<MainScreenAdapter.MyViewHolder>() {
+    private var selectedPos = RecyclerView.NO_POSITION
     var songDetails: ArrayList<Songs>? = null
     var mContext: Context? = null
 
@@ -35,17 +38,22 @@ class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Rec
             args.putString("songArtist",songObject?.artist)
             args.putString("path",songObject?.songData)
             args.putString("songTitle",songObject?.songTitle)
-            args.putInt("SongId",songObject?.songID?.toInt() as Int)
-            args.putInt("SongPostiton", position)
+            args.putInt("songId",songObject?.songID?.toInt() as Int)
+            args.putInt("songPosition", position)
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
+            if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
+                SongPlayingFragment.Statified.mediaPlayer?.pause()
+                SongPlayingFragment.Statified.mediaPlayer?.release()
+            }
             (mContext as MainActivity).supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.details_fragment, songPlayingFragment)
+                    .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
                     .addToBackStack("SongPlayingFragment")
                     .commit()
         })
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
@@ -73,4 +81,5 @@ class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Rec
             contentHolder = view.findViewById(R.id.contentRow) as RelativeLayout
         }
     }
+
 }

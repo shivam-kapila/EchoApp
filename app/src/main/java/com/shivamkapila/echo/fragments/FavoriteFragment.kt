@@ -19,10 +19,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.shivamkapila.echo.fragments.SongPlayingFragment
 
 import com.shivamkapila.echo.R
 import com.shivamkapila.echo.Songs
 import com.shivamkapila.echo.adapters.FavoriteAdapter
+import com.shivamkapila.echo.adapters.MainScreenAdapter
 import com.shivamkapila.echo.databases.EchoDatabase
 
 
@@ -33,14 +35,15 @@ import com.shivamkapila.echo.databases.EchoDatabase
 class FavoriteFragment : Fragment() {
 
     var myActivity: Activity? = null
-
-    var noFavorites: RelativeLayout? = null
+    var favoriteAdapter: FavoriteAdapter? = null
+    var noFavorites: TextView? = null
     var nowPlayingBottomBar: RelativeLayout? = null
-    var playPauseButton: ImageView? = null
+    var playPauseButton: ImageButton? = null
     var songTitle: TextView? = null
     var recyclerView: RecyclerView? = null
     var trackPosition: Int = 0
     var favoriteContent: EchoDatabase? = null
+    var favoriteView: RelativeLayout? = null
 
     var refreshList: ArrayList<Songs>? = null
     var getListfromDatabase: ArrayList<Songs>? = null
@@ -53,8 +56,9 @@ class FavoriteFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout fot this fragment
         val view = inflater!!.inflate(R.layout.fragment_favorite, container, false)
+        setHasOptionsMenu(true)
         activity.title = "Favorites"
-        noFavorites = view?.findViewById(R.id.noFavourites)
+        noFavorites = view?.findViewById(R.id.noFavorites)
         nowPlayingBottomBar = view.findViewById(R.id.hiddenBarFavScreen)
         songTitle = view.findViewById(R.id.songTitleFavScreen)
         playPauseButton = view.findViewById(R.id.playPauseButtonFav)
@@ -74,7 +78,6 @@ class FavoriteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -82,7 +85,7 @@ class FavoriteFragment : Fragment() {
         favoriteContent = EchoDatabase(myActivity)
         display_favorites_by_searching()
         bottomBarSetup()
-        
+
     }
 
     override fun onResume() {
@@ -122,17 +125,17 @@ class FavoriteFragment : Fragment() {
         try {
             bottomBarClickHandler()
             songTitle?.setText(SongPlayingFragment.Statified.currentSongHelper?.songTitle)
-             SongPlayingFragment.Statified.mediaPlayer?.setOnCompletionListener({
+            SongPlayingFragment.Statified.mediaPlayer?.setOnCompletionListener({
                 songTitle?.setText(SongPlayingFragment.Statified.currentSongHelper?.songTitle)
                 SongPlayingFragment.Staticated.onSongComplete()
             })
             if (SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean) {
                 nowPlayingBottomBar?.visibility = View.VISIBLE
-            }else{
+            } else {
                 nowPlayingBottomBar?.visibility = View.INVISIBLE
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -143,9 +146,9 @@ class FavoriteFragment : Fragment() {
             val songPlayingFragment = SongPlayingFragment()
             var args = Bundle()
             args.putString("songArtist", SongPlayingFragment.Statified.currentSongHelper?.songArtist)
-            args.putString("songTitle", SongPlayingFragment.Statified.currentSongHelper?.songTitle)
             args.putString("path", SongPlayingFragment.Statified.currentSongHelper?.songPath)
-            args.putInt("SongID", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
+            args.putString("songTitle", SongPlayingFragment.Statified.currentSongHelper?.songTitle)
+            args.putInt("SongId", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
             args.putInt("songPosition", SongPlayingFragment.Statified.currentSongHelper?.currentPosition?.toInt() as Int)
             args.putParcelableArrayList("songData", SongPlayingFragment.Statified.fetchSongs)
             args.putString("FavBottomBar", "success")
@@ -169,6 +172,7 @@ class FavoriteFragment : Fragment() {
             }
         })
     }
+
     fun display_favorites_by_searching() {
         if (favoriteContent?.checkSize() as Int > 0) {
             refreshList = ArrayList<Songs>()
@@ -177,31 +181,24 @@ class FavoriteFragment : Fragment() {
             if (fetchListfromDevice != null) {
                 for (i in 0..fetchListfromDevice?.size - 1) {
                     for (j in 0..getListfromDatabase?.size as Int - 1) {
-                        if (getListfromDatabase?.get(j)?.songID === fetchListfromDevice?.get(i)?.songID) {
+                        if ((getListfromDatabase?.get(j)?.songID) == (fetchListfromDevice?.get(i)?.songID)) {
                             refreshList?.add((getListfromDatabase as ArrayList<Songs>)[j])
                         }
                     }
                 }
-            }else{
             }
-
             if (refreshList == null) {
                 recyclerView?.visibility = View.INVISIBLE
                 noFavorites?.visibility = View.VISIBLE
             } else {
-                recyclerView?.visibility = View.VISIBLE
-                noFavorites?.visibility = View.INVISIBLE
-                val favoriteAdapter = FavoriteAdapter(refreshList as ArrayList<Songs>, myActivity as Context)
+                var favoriteAdapter = FavoriteAdapter(refreshList as ArrayList<Songs>, myActivity as Context)
                 val mLayoutManager = LinearLayoutManager(activity)
                 recyclerView?.layoutManager = mLayoutManager
                 recyclerView?.itemAnimator = DefaultItemAnimator()
                 recyclerView?.adapter = favoriteAdapter
                 recyclerView?.setHasFixedSize(true)
             }
-
-
-
-        }else{
+        } else {
             recyclerView?.visibility = View.INVISIBLE
             noFavorites?.visibility = View.VISIBLE
         }

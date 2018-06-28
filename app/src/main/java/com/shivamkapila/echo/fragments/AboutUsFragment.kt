@@ -5,10 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import com.shivamkapila.echo.R
@@ -41,19 +38,11 @@ class AboutUsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.menu_blank, menu)
+        super.onCreateOptionsMenu(menu, inflater)
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        myActivity = context as Activity
-    }
-
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        myActivity = activity
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {

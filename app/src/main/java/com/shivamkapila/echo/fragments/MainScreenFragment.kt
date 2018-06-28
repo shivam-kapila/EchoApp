@@ -90,6 +90,16 @@ class MainScreenFragment : Fragment() {
             bottomBarSetup()
         }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        myActivity = context as Activity
+    }
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        myActivity = activity
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         menu?.clear()
         inflater?.inflate(R.menu.main, menu)
@@ -105,32 +115,24 @@ class MainScreenFragment : Fragment() {
             editor?.apply()
             if (getSongsList != null) {
                 Collections.sort(getSongsList, Songs.Statified.nameComparator)
+                _mainScreenAdapter?.notifyDataSetChanged()
             }
-            _mainScreenAdapter?.notifyDataSetChanged()
             return false
         }else if(switcher == R.id.action_sort_recent) {
-            val editortwo = myActivity?.getSharedPreferences("action_sort", Context.MODE_PRIVATE)?.edit()
-            editortwo?.putString("action_sort_recent", "true")
-            editortwo?.putString("action_sort_ascending", "false")
-            editortwo?.apply()
+            val editor = myActivity?.getSharedPreferences("action_sort", Context.MODE_PRIVATE)?.edit()
+            editor?.putString("action_sort_ascending", "false")
+            editor?.putString("action_sort_recent", "true")
+            editor?.apply()
             if (getSongsList != null) {
                 Collections.sort(getSongsList, Songs.Statified.dateComparator)
+                _mainScreenAdapter?.notifyDataSetChanged()
             }
-            _mainScreenAdapter?.notifyDataSetChanged()
             return false
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        myActivity = context as Activity
-    }
 
-    override fun onAttach(activity: Activity?) {
-        super.onAttach(activity)
-        myActivity = activity
-    }
     fun getSongsFromPhone(): ArrayList<Songs> {
         var arrayList = ArrayList<Songs>()
         var contentResolver = myActivity?.contentResolver
@@ -175,7 +177,7 @@ class MainScreenFragment : Fragment() {
 
     fun bottomBarClickHandler() {
         nowPlayingBottomBar?.setOnClickListener({
-            Statified.mediaPlayer = SongPlayingFragment.Statified.mediaPlayer
+            MainScreenFragment.Statified.mediaPlayer = SongPlayingFragment.Statified.mediaPlayer
             val songPlayingFragment = SongPlayingFragment()
             var args = Bundle()
             args.putString("songArtist", SongPlayingFragment.Statified.currentSongHelper?.songArtist)

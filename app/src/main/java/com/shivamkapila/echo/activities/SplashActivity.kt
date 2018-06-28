@@ -34,35 +34,29 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            131 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[3] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[4] == PackageManager.PERMISSION_GRANTED) {
-                    //show splash screen for one 1sec and start next activity
-                    handle()
-                } else {
-                    Toast.makeText(this@SplashActivity, "please grant all permissions to continue", Toast.LENGTH_SHORT).show()
+        when(requestCode){
+            131 ->{
+                if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED
+                        && grantResults[1]==PackageManager.PERMISSION_GRANTED
+                        && grantResults[2]==PackageManager.PERMISSION_GRANTED
+                        && grantResults[3]==PackageManager.PERMISSION_GRANTED
+                        && grantResults[4]==PackageManager.PERMISSION_GRANTED)
+                {
+                    handle()                                           // open splash screen if all permissions are granted
+                }
+                else{
+                    Toast.makeText(this@SplashActivity,"Grant Permissions", Toast.LENGTH_SHORT).show()
                     this.finish()
                 }
                 return
             }
             else -> {
-                Toast.makeText(this@SplashActivity, "Something went wrong", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@SplashActivity,"Something Went Wrong", Toast.LENGTH_SHORT).show()
                 this.finish()
                 return
             }
         }
-    }
 
-    fun handle() {
-        Handler().postDelayed({
-            val startAct = Intent(this@SplashActivity, MainActivity::class.java)
-            startActivity(startAct)
-            this.finish()
-        }, 1000)
     }
 
     fun hasPermissions(context: Context, vararg permissions: String): Boolean {
@@ -74,5 +68,13 @@ class SplashActivity : AppCompatActivity() {
             }
         }
         return hasAllPermissions
+    }
+
+    fun handle() {
+        Handler().postDelayed({
+            val startAct = Intent(this@SplashActivity, MainActivity::class.java)
+            startActivity(startAct)
+            this.finish()
+        }, 1000)
     }
 }

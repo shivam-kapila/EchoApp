@@ -1,10 +1,12 @@
 package com.shivamkapila.echo.activities
 
+import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     var trackNotificationBuilder: Notification? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         navigationDrawerIconsList.add("About Us")
 
         val toggle = ActionBarDrawerToggle(this@MainActivity, MainActivity.Statified.drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        MainActivity.Statified.drawerLayout?.addDrawerListener(toggle)
+        MainActivity.Statified.drawerLayout?.setDrawerListener(toggle)
         toggle.syncState()
 
         val mainScreenFragment = MainScreenFragment()
@@ -65,26 +68,35 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this@MainActivity, MainActivity::class.java)
         val pIntent = PendingIntent.getActivity(this@MainActivity, System.currentTimeMillis().toInt(),
                 intent, 0)
-        trackNotificationBuilder = Notification.Builder(this)
-                .setContentTitle("A track is playing in background")
-                .setSmallIcon(R.drawable.echo_icon)
-                .setContentIntent(pIntent)
-                .setOngoing(true)
-                .setAutoCancel(true)
-                .build()
+            trackNotificationBuilder = Notification.Builder(this)
+                    .setContentTitle("A track is playing in background")
+                    .setSmallIcon(R.drawable.echo_icon)
+                    .setContentIntent(pIntent)
+                    .setOngoing(true)
+                    .setAutoCancel(true)
+                    .build()
+
         Statified.notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     }
 
     override fun onStart() {
-        super.onStart()
         try {
             Statified.notificationManager?.cancel(1978)
         }catch(e: Exception){
             e.printStackTrace()
         }
+        super.onStart()
     }
 
+    override fun onResume() {
+        try {
+            Statified.notificationManager?.cancel(1978)
+        }catch(e: Exception){
+            e.printStackTrace()
+        }
+        super.onResume()
+    }
     override fun onStop() {
         super.onStop()
         try {
@@ -96,13 +108,16 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        try {
-            Statified.notificationManager?.cancel(1978)
-        }catch(e: Exception){
+    override fun onDestroy() {
+        try{
+            if(SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
+                Statified.notificationManager?.notify(1978, trackNotificationBuilder)
+            }
+        }catch(e : Exception) {
             e.printStackTrace()
         }
+
+        super.onDestroy()
     }
+
 }

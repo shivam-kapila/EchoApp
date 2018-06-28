@@ -34,6 +34,7 @@ class NavigationDrawerAdapter(_contentList: ArrayList<String>, _getImages: IntAr
                 (mContext as MainActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.details_fragment, mainScreenFragment)
+                        .addToBackStack("MainFragment")
                         .commit()
             }
 
@@ -43,6 +44,7 @@ class NavigationDrawerAdapter(_contentList: ArrayList<String>, _getImages: IntAr
                 (mContext as MainActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.details_fragment, favoriteFragment)
+                        .addToBackStack("FavFragment")
                         .commit()
             }
             else if (position == 2) {
@@ -50,12 +52,14 @@ class NavigationDrawerAdapter(_contentList: ArrayList<String>, _getImages: IntAr
                 (mContext as MainActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.details_fragment, settingsFragment)
+                        .addToBackStack("SettingsFragment")
                         .commit()
             } else if (position == 3) {
                 val aboutUsFragment = AboutUsFragment()
                 (mContext as MainActivity).supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.details_fragment, aboutUsFragment)
+                        .addToBackStack("AboutUsFragment")
                         .commit()
             }
             MainActivity.Statified.drawerLayout?.closeDrawers()

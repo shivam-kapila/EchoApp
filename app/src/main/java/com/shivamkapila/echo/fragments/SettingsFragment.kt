@@ -5,10 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Switch
 import com.shivamkapila.echo.R
 
@@ -29,8 +26,8 @@ class SettingsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_settings, container, false)
-        shakeSwitch = view?.findViewById(R.id.switchShake)
         activity.title = "Settings"
+        shakeSwitch = view?.findViewById(R.id.switchShake)
         return view
     }
 
@@ -72,7 +69,12 @@ class SettingsFragment : Fragment() {
         })
     }
 
-
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.menu_blank, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+        //menu?.clear()
+    }
 
     override fun onPrepareOptionsMenu(menu: Menu?) {
         super.onPrepareOptionsMenu(menu)
