@@ -29,6 +29,8 @@ import com.shivamkapila.echo.Songs
 import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.databases.EchoDatabase
 import com.shivamkapila.echo.utils.SeekBarController
+import java.sql.Time
+import java.time.LocalTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -38,7 +40,7 @@ import java.util.concurrent.TimeUnit
  */
 class SongPlayingFragment : Fragment() {
 
-    object Statified{
+    object Statified {
 
         var myActivity: Activity? = null
         var mediaPlayer: MediaPlayer? = null
@@ -52,7 +54,7 @@ class SongPlayingFragment : Fragment() {
         var songArtistView: TextView? = null
         var songTitleView: TextView? = null
         var shuffleImageButton: ImageButton? = null
-
+        var check: Boolean = true
         var _currentPosition: Int = 0
         var fetchSongs: ArrayList<Songs>? = null
 
@@ -66,9 +68,8 @@ class SongPlayingFragment : Fragment() {
 
         var mSensorManager: SensorManager? = null
         var mSensorListener: SensorEventListener? = null
-
         var MY_PREFS_NAME = "ShakeFeature"
-        var back: String?= null
+        var back: String? = null
         var updateSongTime = object : Runnable {
             override fun run() {
                 try {
@@ -79,8 +80,9 @@ class SongPlayingFragment : Fragment() {
                                     TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long))))
 
                     seekbar?.setProgress(getCurrent?.toInt() as Int)
+                    Statified.check = true
                     Handler().postDelayed(this, 1000)
-                }catch(e: Exception) {
+                } catch (e: Exception) {
                 }
             }
         }
@@ -88,7 +90,7 @@ class SongPlayingFragment : Fragment() {
     }
 
 
-    object Staticated{
+    object Staticated {
 
         var MY_PREFS_SHUFFLE = "Shuffle feature"
         var MY_PREFS_LOOP = "Loop feature"
@@ -132,11 +134,9 @@ class SongPlayingFragment : Fragment() {
 
             }
 
-            if(Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean){
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
-            }
-            else
-            {
+            } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
 
             }
@@ -145,12 +145,10 @@ class SongPlayingFragment : Fragment() {
         fun updateTextViews(songTitle: String, songArtist: String) {
             var songTitleUpdated = songTitle
             var songArtistUpdated = songArtist
-            if(songTitle.equals("<unknown>", true))
-            {
+            if (songTitle.equals("<unknown>", true)) {
                 songTitleUpdated = "unknown"
             }
-            if(songArtist.equals("<unknown>", true))
-            {
+            if (songArtist.equals("<unknown>", true)) {
                 songArtistUpdated = "unknown"
             }
             Statified.songTitleView?.setText(songTitleUpdated)
@@ -198,6 +196,12 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.songArtist = nextSong?.artist
             Statified.currentSongHelper?.songId = nextSong?.songID as Long
             Statified.currentSongHelper?.currentPosition = Statified._currentPosition
+            var editorLoop = Statified.myActivity?.getSharedPreferences(Staticated.MY_PREFS_LOOP, Context.MODE_PRIVATE)?.edit()
+
+                Statified.currentSongHelper?.isLoop = false
+                Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
+                editorLoop?.putBoolean("feature", false)
+                editorLoop?.apply()
 
             updateTextViews(Statified.currentSongHelper?.songTitle as String, Statified.currentSongHelper?.songArtist as String)
 
@@ -212,14 +216,14 @@ class SongPlayingFragment : Fragment() {
                 e.printStackTrace()
             }
 
-            if(Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean){
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
-            }
-            else {
+            } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
             }
 
         }
+
         fun playPrevious() {
 
             Statified._currentPosition = Statified._currentPosition - 1
@@ -256,18 +260,15 @@ class SongPlayingFragment : Fragment() {
                 e.printStackTrace()
             }
 
-            if(Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean){
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
-            }
-            else
-            {
+            } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
             }
         }
 
 
     }
-
 
 
     var mAcceleration: Float = 0f
@@ -297,9 +298,7 @@ class SongPlayingFragment : Fragment() {
 
         Statified.glView = view?.findViewById(R.id.visualizer_view)
         Statified.fab = view?.findViewById(R.id.favoriteIcon)
-        Statified.fab?. alpha = 0.8f
-
-
+        Statified.fab?.alpha = 0.8f
         return view
 
     }
@@ -412,12 +411,12 @@ class SongPlayingFragment : Fragment() {
 
         var prefsForShuffle = Statified.myActivity?.getSharedPreferences(Staticated.MY_PREFS_SHUFFLE, Context.MODE_PRIVATE)
         var isShuffleAllowed = prefsForShuffle?.getBoolean("feature", false)
-        if(isShuffleAllowed as Boolean){
+        if (isShuffleAllowed as Boolean) {
             Statified.currentSongHelper?.isShuffle = true
             Statified.currentSongHelper?.isLoop = false
             Statified.shuffleImageButton?.setBackgroundResource(R.drawable.shuffle_icon)
             Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
-        }else{
+        } else {
             Statified.currentSongHelper?.isShuffle = false
             Statified.shuffleImageButton?.setBackgroundResource(R.drawable.shuffle_white_icon)
         }
@@ -425,21 +424,19 @@ class SongPlayingFragment : Fragment() {
 
         var prefsForLoop = Statified.myActivity?.getSharedPreferences(Staticated.MY_PREFS_LOOP, Context.MODE_PRIVATE)
         var isLoopAllowed = prefsForLoop?.getBoolean("feature", false)
-        if(isLoopAllowed as Boolean){
+        if (isLoopAllowed as Boolean) {
             Statified.currentSongHelper?.isShuffle = false
             Statified.currentSongHelper?.isLoop = true
             Statified.shuffleImageButton?.setBackgroundResource(R.drawable.shuffle_white_icon)
             Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_icon)
-        }else{
+        } else {
             Statified.currentSongHelper?.isLoop = false
             Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
         }
 
-        if(Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean){
+        if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
             Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
-        }
-        else
-        {
+        } else {
             Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
 
         }
@@ -459,6 +456,7 @@ class SongPlayingFragment : Fragment() {
         mAccelerationCurrent = SensorManager.GRAVITY_EARTH
         mAccelerationLast = SensorManager.GRAVITY_EARTH
         bindShakeListener()
+
 
     }
 
@@ -480,16 +478,15 @@ class SongPlayingFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when(item?.itemId){
-            R.id.action_redirect-> {
-                var pos =0
-                if (Statified.back.equals("Favorite",true)) {
+        when (item?.itemId) {
+            R.id.action_redirect -> {
+                var pos = 0
+                if (Statified.back.equals("Favorite", true)) {
                     pos = 0
                 }
-                if (Statified.back.equals("MainScreen",true)) {
-                    pos =1
+                if (Statified.back.equals("MainScreen", true)) {
+                    pos = 1
                 }
-                println(Statified.back)
                 if (pos == 1) {
                     val mainScreenFragment = MainScreenFragment()
                     (context as MainActivity).supportFragmentManager
@@ -500,7 +497,7 @@ class SongPlayingFragment : Fragment() {
                 }
 
                 /*The next item is the Favorites option and the fragment corresponding to it is the favorite fragment at position 1*/
-                 if (pos == 0) {
+                if (pos == 0) {
                     val favoriteFragment = FavoriteFragment()
                     (context as MainActivity).supportFragmentManager
                             .beginTransaction()
@@ -516,17 +513,14 @@ class SongPlayingFragment : Fragment() {
     }
 
 
-
     fun clickHandler() {
 
         Statified.fab?.setOnClickListener({
-            if(Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean){
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
                 Statified.favoriteContent?.deleteFavourite(Statified.currentSongHelper?.songId?.toInt() as Int)
                 Toast.makeText(Statified.myActivity, "Removed from favorites", Toast.LENGTH_SHORT).show()
-            }
-            else
-            {
+            } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
                 Statified.favoriteContent?.storeAsFavorite(Statified.currentSongHelper?.songId?.toInt(), Statified.currentSongHelper?.songArtist,
                         Statified.currentSongHelper?.songTitle, Statified.currentSongHelper?.songPath)
@@ -550,7 +544,7 @@ class SongPlayingFragment : Fragment() {
                 Statified.currentSongHelper?.isShuffle = true
                 Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
                 Statified.shuffleImageButton?.setBackgroundResource(R.drawable.shuffle_icon)
-                editorShuffle?.putBoolean("feature",true)
+                editorShuffle?.putBoolean("feature", true)
                 editorShuffle?.apply()
                 editorLoop?.putBoolean("feature", false)
                 editorLoop?.apply()
@@ -592,7 +586,7 @@ class SongPlayingFragment : Fragment() {
                 Statified.currentSongHelper?.isShuffle = false
                 Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_icon)
                 Statified.shuffleImageButton?.setBackgroundResource(R.drawable.shuffle_white_icon)
-                editorLoop?.putBoolean("feature",true)
+                editorLoop?.putBoolean("feature", true)
                 editorLoop?.apply()
                 editorShuffle?.putBoolean("feature", false)
                 editorShuffle?.apply()
@@ -618,44 +612,47 @@ class SongPlayingFragment : Fragment() {
     }
 
 
+    fun bindShakeListener() {
 
-
-
-    fun bindShakeListener(){
-
-        Statified.mSensorListener = object:SensorEventListener{
+        Statified.mSensorListener = object : SensorEventListener {
             override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
             }
 
             override fun onSensorChanged(p0: SensorEvent) {
 
-                val x = p0.values[0]
-                val y = p0.values[1]
-                val z = p0.values[2]
+                    val x = p0.values[0]
+                    val y = p0.values[1]
+                    val z = p0.values[2]
 
-                mAccelerationLast = mAccelerationCurrent
-                mAccelerationCurrent = Math.sqrt(((x*x + y*y + z*z).toDouble())).toFloat()
-                val delta = mAccelerationCurrent - mAccelerationLast
-                mAcceleration = mAcceleration * 0.9f + delta
-
-                if(mAcceleration > 12){
-                    val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
-                    val isAllowed = prefs?.getBoolean("feature", false)
-                    if(isAllowed as Boolean){
-                        Staticated.playNext("PlayNextNormal")
+                    mAccelerationLast = mAccelerationCurrent
+                    mAccelerationCurrent = Math.sqrt(((x * x + y * y + z * z).toDouble())).toFloat()
+                    val delta = mAccelerationCurrent - mAccelerationLast
+                    mAcceleration = mAcceleration * 0.9f + delta
+                    if (mAcceleration > 12 ) {
+                        println("11111")
+                        val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
+                        val isAllowed = prefs?.getBoolean("feature", false)
+                        if (isAllowed as Boolean && Statified.check == true) {
+                            Statified.currentSongHelper?.isPlaying = true
+                            if (Statified.currentSongHelper?.isLoop as Boolean) {
+                                Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
+                            }
+                            if (Statified.currentSongHelper?.isShuffle as Boolean) {
+                                Staticated.playNext("PlayNextLikeNormalShuffle")
+                            } else {
+                                Staticated.playNext("PlayNextNormal")
+                            }
+                            Statified.check = false
                     }
-
                 }
-
             }
 
-
+            }
         }
 
 
 
-    }
     fun seekbarHandler() {
         val seekbarListener = SeekBarController()
         Statified.seekbar?.setOnSeekBarChangeListener(seekbarListener)
