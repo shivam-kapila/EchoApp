@@ -17,6 +17,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.shivamkapila.echo.R
 import com.shivamkapila.echo.Songs
+import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.adapters.MainScreenAdapter
 import java.util.*
 
@@ -190,7 +191,6 @@ class MainScreenFragment : Fragment() {
             songPlayingFragment.arguments = args
             fragmentManager.beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment)
-                    .addToBackStack("SongPlayingFragment")
                     .commit()
         })
 
@@ -207,7 +207,6 @@ class MainScreenFragment : Fragment() {
             }
         })
     }
-
 
 
 }// Required empty public constructor

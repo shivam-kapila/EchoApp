@@ -20,18 +20,19 @@ import com.shivamkapila.echo.adapters.NavigationDrawerAdapter
 import com.shivamkapila.echo.fragments.MainScreenFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import com.shivamkapila.echo.fragments.FavoriteFragment
 import com.shivamkapila.echo.fragments.SongPlayingFragment
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
     object Statified {
         var drawerLayout: DrawerLayout? = null
         var notificationManager: NotificationManager? = null
+
     }
 
     var navigationDrawerIconsList: ArrayList<String> = arrayListOf()
     var images_for_navdrawer = intArrayOf(R.drawable.navigation_allsongs, R.drawable.navigation_favorites, R.drawable.navigation_settings, R.drawable.navigation_aboutus)
     var trackNotificationBuilder: Notification? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,13 +69,13 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this@MainActivity, MainActivity::class.java)
         val pIntent = PendingIntent.getActivity(this@MainActivity, System.currentTimeMillis().toInt(),
                 intent, 0)
-            trackNotificationBuilder = Notification.Builder(this)
-                    .setContentTitle("A track is playing in background")
-                    .setSmallIcon(R.drawable.echo_icon)
-                    .setContentIntent(pIntent)
-                    .setOngoing(true)
-                    .setAutoCancel(true)
-                    .build()
+        trackNotificationBuilder = Notification.Builder(this)
+                .setContentTitle("A track is playing in background")
+                .setSmallIcon(R.drawable.echo_icon)
+                .setContentIntent(pIntent)
+                .setOngoing(true)
+                .setAutoCancel(true)
+                .build()
 
         Statified.notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         try {
             Statified.notificationManager?.cancel(1978)
-        }catch(e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         super.onStart()
@@ -92,11 +93,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         try {
             Statified.notificationManager?.cancel(1978)
-        }catch(e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         super.onResume()
     }
+
     override fun onStop() {
         super.onStop()
         try {
@@ -104,20 +106,31 @@ class MainActivity : AppCompatActivity() {
                 Statified.notificationManager?.notify(1978, trackNotificationBuilder)
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
     override fun onDestroy() {
-        try{
-            if(SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
+        try {
+            if (SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean) {
                 Statified.notificationManager?.notify(1978, trackNotificationBuilder)
             }
-        }catch(e : Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
         super.onDestroy()
     }
+
+    override fun onBackPressed() {
+        val mainScreenFragment = MainScreenFragment()
+        this.supportFragmentManager
+                .beginTransaction()
+                .add(R.id.details_fragment, mainScreenFragment, "MainScreenFragment")
+                .commit()
+        super.onBackPressed()
+    }
+
 
 }

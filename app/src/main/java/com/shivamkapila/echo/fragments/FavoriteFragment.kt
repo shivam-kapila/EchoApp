@@ -23,6 +23,7 @@ import com.shivamkapila.echo.fragments.SongPlayingFragment
 
 import com.shivamkapila.echo.R
 import com.shivamkapila.echo.Songs
+import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.adapters.FavoriteAdapter
 import com.shivamkapila.echo.adapters.MainScreenAdapter
 import com.shivamkapila.echo.databases.EchoDatabase
@@ -155,7 +156,6 @@ class FavoriteFragment : Fragment() {
             songPlayingFragment.arguments = args
             fragmentManager.beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment)
-                    .addToBackStack("SongPlayingFragmentFavorite")
                     .commit()
         })
 
@@ -203,4 +203,5 @@ class FavoriteFragment : Fragment() {
             noFavorites?.visibility = View.VISIBLE
         }
     }
+
 }// Required empty public constructor

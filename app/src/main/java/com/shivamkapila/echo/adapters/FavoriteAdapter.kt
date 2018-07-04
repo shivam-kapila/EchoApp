@@ -2,8 +2,10 @@ package com.shivamkapila.echo.adapters
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +13,11 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.shivamkapila.echo.R
 import com.shivamkapila.echo.Songs
+import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.fragments.SongPlayingFragment
+import android.view.KeyEvent.KEYCODE_BACK
+
+
 
 class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : RecyclerView.Adapter<FavoriteAdapter.MyViewHolder>() {
     var songDetails: ArrayList<Songs>? = null
@@ -38,6 +44,7 @@ class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Recyc
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
             SongPlayingFragment.Statified.back = "Favorite"
+            SongPlayingFragment.Statified.counter = 0
             if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
                 SongPlayingFragment.Statified.mediaPlayer?.pause()
                 SongPlayingFragment.Statified.mediaPlayer?.release()
@@ -45,10 +52,10 @@ class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Recyc
             (mContext as FragmentActivity).supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
-                    .addToBackStack("SongPlayingFragmentFav")
                     .commit()
         })
     }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
                 .inflate(R.layout.row_custom_mainscreen_adapter, parent, false)
@@ -74,6 +81,8 @@ class FavoriteAdapter(_songDetails: ArrayList<Songs>, _context: Context) : Recyc
             trackArtist = view.findViewById(R.id.trackArtist) as TextView
             contentHolder = view.findViewById(R.id.contentRow) as RelativeLayout
         }
+
     }
+
 }
 

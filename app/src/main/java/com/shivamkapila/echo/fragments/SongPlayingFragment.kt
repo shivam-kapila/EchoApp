@@ -1,6 +1,5 @@
 package com.shivamkapila.echo.fragments
 
-
 import android.app.Activity
 import android.content.Context
 import android.hardware.Sensor
@@ -29,17 +28,10 @@ import com.shivamkapila.echo.Songs
 import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.databases.EchoDatabase
 import com.shivamkapila.echo.utils.SeekBarController
-import java.sql.Time
-import java.time.LocalTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-
-/**
- * A simple [Fragment] subclass.
- */
 class SongPlayingFragment : Fragment() {
-
     object Statified {
 
         var myActivity: Activity? = null
@@ -65,7 +57,7 @@ class SongPlayingFragment : Fragment() {
         var fab: ImageButton? = null
 
         var favoriteContent: EchoDatabase? = null
-
+        var counter: Int = 0
         var mSensorManager: SensorManager? = null
         var mSensorListener: SensorEventListener? = null
         var MY_PREFS_NAME = "ShakeFeature"
@@ -82,7 +74,9 @@ class SongPlayingFragment : Fragment() {
                     seekbar?.setProgress(getCurrent?.toInt() as Int)
                     Statified.check = true
                     Handler().postDelayed(this, 1000)
+
                 } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -114,7 +108,6 @@ class SongPlayingFragment : Fragment() {
                     Statified.currentSongHelper?.currentPosition = Statified._currentPosition
 
                     updateTextViews(Statified.currentSongHelper?.songTitle as String, Statified.currentSongHelper?.songArtist as String)
-
 
                     Statified.mediaPlayer?.reset()
                     try {
@@ -198,11 +191,15 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.currentPosition = Statified._currentPosition
             var editorLoop = Statified.myActivity?.getSharedPreferences(Staticated.MY_PREFS_LOOP, Context.MODE_PRIVATE)?.edit()
 
-                Statified.currentSongHelper?.isLoop = false
-                Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
-                editorLoop?.putBoolean("feature", false)
-                editorLoop?.apply()
-
+            Statified.currentSongHelper?.isLoop = false
+            Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
+            editorLoop?.putBoolean("feature", false)
+            editorLoop?.apply()
+            if (Statified.currentSongHelper?.isPlaying as Boolean) {
+                Statified.playPauseImageButton?.setBackgroundResource(R.drawable.pause_icon)
+            } else {
+                Statified.playPauseImageButton?.setBackgroundResource(R.drawable.play_icon)
+            }
             updateTextViews(Statified.currentSongHelper?.songTitle as String, Statified.currentSongHelper?.songArtist as String)
 
             Statified.mediaPlayer?.reset()
@@ -325,6 +322,7 @@ class SongPlayingFragment : Fragment() {
         Statified.audioVisualization?.onResume()
         Statified.mSensorManager?.registerListener(Statified.mSensorListener, Statified.mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL)
+
     }
 
     override fun onPause() {
@@ -336,6 +334,7 @@ class SongPlayingFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         Statified.audioVisualization?.release()
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -351,9 +350,9 @@ class SongPlayingFragment : Fragment() {
         var _songTitle: String? = null
         var _songArtist: String? = null
         var songId: Long = 0
-
+        var fromFavBottomBar: String? = null
+        var fromMainScreenBottomBar: String? = null
         try {
-
 
             path = arguments.getString("path")
             _songTitle = arguments.getString("songTitle")
@@ -367,6 +366,8 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.songId = songId
             Statified.currentSongHelper?.currentPosition = Statified._currentPosition
 
+            fromFavBottomBar = arguments.get("FavBottomBar") as? String
+            fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
 
             Staticated.updateTextViews(Statified.currentSongHelper?.songTitle as String, Statified.currentSongHelper?.songArtist as String)
 
@@ -374,13 +375,13 @@ class SongPlayingFragment : Fragment() {
             e.printStackTrace()
         }
 
-
-        var fromFavBottomBar = arguments.get("FavBottomBar") as? String
-        var fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
         if (fromFavBottomBar != null) {
             Statified.mediaPlayer = FavoriteFragment.Statified.mediaPlayer
+            Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
         } else if (fromMainScreenBottomBar != null) {
             Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
+            Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
+
         } else {
             Statified.mediaPlayer = MediaPlayer()
             Statified.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
@@ -392,6 +393,8 @@ class SongPlayingFragment : Fragment() {
             }
 
             Statified.mediaPlayer?.start()
+            Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
+
         }
         Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
         if (Statified.mediaPlayer?.isPlaying as Boolean) {
@@ -443,11 +446,6 @@ class SongPlayingFragment : Fragment() {
         seekbarHandler()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Statified.mediaPlayer?.stop()
-        Statified.mediaPlayer?.release()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -492,17 +490,14 @@ class SongPlayingFragment : Fragment() {
                     (context as MainActivity).supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.details_fragment, mainScreenFragment)
-                            .addToBackStack("MainFragment")
                             .commit()
                 }
 
-                /*The next item is the Favorites option and the fragment corresponding to it is the favorite fragment at position 1*/
                 if (pos == 0) {
                     val favoriteFragment = FavoriteFragment()
                     (context as MainActivity).supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.details_fragment, favoriteFragment)
-                            .addToBackStack("FavoriteFragment")
                             .commit()
                 }
                 return false
@@ -604,6 +599,7 @@ class SongPlayingFragment : Fragment() {
                 Statified.mediaPlayer?.start()
                 Statified.currentSongHelper?.isPlaying = true
                 Statified.playPauseImageButton?.setBackgroundResource(R.drawable.pause_icon)
+                Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
             }
 
         })
@@ -621,37 +617,35 @@ class SongPlayingFragment : Fragment() {
 
             override fun onSensorChanged(p0: SensorEvent) {
 
-                    val x = p0.values[0]
-                    val y = p0.values[1]
-                    val z = p0.values[2]
+                val x = p0.values[0]
+                val y = p0.values[1]
+                val z = p0.values[2]
 
-                    mAccelerationLast = mAccelerationCurrent
-                    mAccelerationCurrent = Math.sqrt(((x * x + y * y + z * z).toDouble())).toFloat()
-                    val delta = mAccelerationCurrent - mAccelerationLast
-                    mAcceleration = mAcceleration * 0.9f + delta
-                    if (mAcceleration > 12 ) {
-                        println("11111")
-                        val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
-                        val isAllowed = prefs?.getBoolean("feature", false)
-                        if (isAllowed as Boolean && Statified.check == true) {
-                            Statified.currentSongHelper?.isPlaying = true
-                            if (Statified.currentSongHelper?.isLoop as Boolean) {
-                                Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
-                            }
-                            if (Statified.currentSongHelper?.isShuffle as Boolean) {
-                                Staticated.playNext("PlayNextLikeNormalShuffle")
-                            } else {
-                                Staticated.playNext("PlayNextNormal")
-                            }
-                            Statified.check = false
+                mAccelerationLast = mAccelerationCurrent
+                mAccelerationCurrent = Math.sqrt(((x * x + y * y + z * z).toDouble())).toFloat()
+                val delta = mAccelerationCurrent - mAccelerationLast
+                mAcceleration = mAcceleration * 0.9f + delta
+                if (mAcceleration > 12) {
+                    println("11111")
+                    val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
+                    val isAllowed = prefs?.getBoolean("feature", false)
+                    if (isAllowed as Boolean && Statified.check == true) {
+                        Statified.currentSongHelper?.isPlaying = true
+                        if (Statified.currentSongHelper?.isLoop as Boolean) {
+                            Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
+                        }
+                        if (Statified.currentSongHelper?.isShuffle as Boolean) {
+                            Staticated.playNext("PlayNextLikeNormalShuffle")
+                        } else {
+                            Staticated.playNext("PlayNextNormal")
+                        }
+                        Statified.check = false
                     }
                 }
             }
 
-            }
         }
-
-
+    }
 
     fun seekbarHandler() {
         val seekbarListener = SeekBarController()

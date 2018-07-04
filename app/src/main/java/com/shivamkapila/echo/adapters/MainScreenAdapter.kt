@@ -3,6 +3,7 @@ package com.shivamkapila.echo.adapters
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -43,18 +44,17 @@ class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context)
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
             SongPlayingFragment.Statified.back = "MainScreen"
+            SongPlayingFragment.Statified.counter = 0
             if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
                 SongPlayingFragment.Statified.mediaPlayer?.pause()
                 SongPlayingFragment.Statified.mediaPlayer?.release()
             }
-            (mContext as MainActivity).supportFragmentManager
+            (mContext as FragmentActivity).supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
-                    .addToBackStack("SongPlayingFragment")
                     .commit()
         })
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
