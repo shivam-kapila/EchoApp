@@ -134,7 +134,6 @@ open class MainActivity : AppCompatActivity() {
                     Statified.IS_MUSIC_SCREEN = false
                 } else {
                     moveTaskToBack(true)
-                    println("12345")
                     return true
                 }
             }

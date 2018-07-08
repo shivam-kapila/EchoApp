@@ -37,7 +37,7 @@ class MainScreenFragment : Fragment() {
     var noSongs: RelativeLayout? = null
     var recyclerView: RecyclerView? = null
     var myActivity: Activity? = null
-    var _mainScreenAdapter: MainScreenAdapter?=null
+    var _mainScreenAdapter: MainScreenAdapter? = null
     var trackPosition: Int = 0
 
     object Statified {
@@ -70,8 +70,7 @@ class MainScreenFragment : Fragment() {
         if (getSongsList == null) {
             visibleLayout?.visibility = View.INVISIBLE
             noSongs?.visibility = View.VISIBLE
-        }
-        else {
+        } else {
             _mainScreenAdapter = MainScreenAdapter(getSongsList as ArrayList<Songs>, myActivity as Context)
             val mLayoutManager = LinearLayoutManager(myActivity)
             recyclerView?.layoutManager = mLayoutManager
@@ -89,8 +88,8 @@ class MainScreenFragment : Fragment() {
                 _mainScreenAdapter?.notifyDataSetChanged()
             }
         }
-            bottomBarSetup()
-        }
+        bottomBarSetup()
+    }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -120,7 +119,7 @@ class MainScreenFragment : Fragment() {
                 _mainScreenAdapter?.notifyDataSetChanged()
             }
             return false
-        }else if(switcher == R.id.action_sort_recent) {
+        } else if (switcher == R.id.action_sort_recent) {
             val editor = myActivity?.getSharedPreferences("action_sort", Context.MODE_PRIVATE)?.edit()
             editor?.putString("action_sort_ascending", "false")
             editor?.putString("action_sort_recent", "true")
@@ -168,11 +167,11 @@ class MainScreenFragment : Fragment() {
             })
             if (SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean) {
                 nowPlayingBottomBar?.visibility = View.VISIBLE
-            }else{
+            } else {
                 nowPlayingBottomBar?.visibility = View.INVISIBLE
             }
 
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -185,14 +184,14 @@ class MainScreenFragment : Fragment() {
             args.putString("songArtist", SongPlayingFragment.Statified.currentSongHelper?.songArtist)
             args.putString("songTitle", SongPlayingFragment.Statified.currentSongHelper?.songTitle)
             args.putString("path", SongPlayingFragment.Statified.currentSongHelper?.songPath)
-            args.putInt("SongID", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
+            args.putInt("songId", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
             args.putInt("songPosition", SongPlayingFragment.Statified.currentSongHelper?.currentPosition?.toInt() as Int)
             args.putParcelableArrayList("songData", SongPlayingFragment.Statified.fetchSongs)
             args.putString("MainScreenBottomBar", "success")
             songPlayingFragment.arguments = args
             fragmentManager.beginTransaction()
-                    .replace(R.id.details_fragment, songPlayingFragment)
-                    .commit()
+                .replace(R.id.details_fragment, songPlayingFragment)
+                .commit()
 
         })
 

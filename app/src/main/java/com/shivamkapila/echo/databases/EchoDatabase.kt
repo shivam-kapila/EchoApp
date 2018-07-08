@@ -20,9 +20,10 @@ class EchoDatabase : SQLiteOpenHelper {
         val COLUMN_SONG_ARTIST = "SongArtist"
         val COLUMN_SONG_PATH = "SongPath"
     }
+
     override fun onCreate(sqLiteDatabase: SQLiteDatabase?) {
         sqLiteDatabase?.execSQL("CREATE TABLE " + Staticated.TABLE_NAME + "( " + Staticated.COLUMN_ID + " INTEGER," + Staticated.COLUMN_SONG_ARTIST + " STRING,"
-                + Staticated.COLUMN_SONG_TITLE + " STRING," + Staticated.COLUMN_SONG_PATH + " STRING);"
+            + Staticated.COLUMN_SONG_TITLE + " STRING," + Staticated.COLUMN_SONG_PATH + " STRING);"
         )
 
     }
@@ -59,11 +60,11 @@ class EchoDatabase : SQLiteOpenHelper {
                     var _title = cSor.getString(cSor.getColumnIndexOrThrow(Staticated.COLUMN_SONG_TITLE))
                     var _songPath = cSor.getString(cSor.getColumnIndexOrThrow(Staticated.COLUMN_SONG_PATH))
                     _songList.add(Songs(_id.toLong(), _title, _artist, _songPath, 0))
-                }while (cSor.moveToNext())
-            }else{
+                } while (cSor.moveToNext())
+            } else {
                 return null
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return _songList
@@ -92,7 +93,7 @@ class EchoDatabase : SQLiteOpenHelper {
         db.close()
     }
 
-    fun checkSize(): Int{
+    fun checkSize(): Int {
         var counter = 0
         val db = this.readableDatabase
         val query_params = "SELECT * FROM " + Staticated.TABLE_NAME
@@ -100,8 +101,8 @@ class EchoDatabase : SQLiteOpenHelper {
         if (cSor.moveToFirst()) {
             do {
                 counter = counter + 1
-            }while (cSor.moveToNext())
-        }else{
+            } while (cSor.moveToNext())
+        } else {
             return 0
         }
         return counter

@@ -44,36 +44,37 @@ class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context)
         holder.contentHolder?.setOnClickListener({
             val songPlayingFragment = SongPlayingFragment()
             var args = Bundle()
-            args.putString("songArtist",songObject?.artist)
-            args.putString("path",songObject?.songData)
-            args.putString("songTitle",songObject?.songTitle)
-            args.putInt("songId",songObject?.songID?.toInt() as Int)
+            args.putString("songArtist", songObject?.artist)
+            args.putString("path", songObject?.songData)
+            args.putString("songTitle", songObject?.songTitle)
+            args.putInt("songId", songObject?.songID?.toInt() as Int)
             args.putInt("songPosition", position)
             args.putParcelableArrayList("songData", songDetails)
             songPlayingFragment.arguments = args
             SongPlayingFragment.Statified.back = "MainScreen"
             SongPlayingFragment.Statified.counter = 0
-            if(SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean){
+            if (SongPlayingFragment.Statified.mediaPlayer != null && SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean) {
                 SongPlayingFragment.Statified.mediaPlayer?.pause()
                 SongPlayingFragment.Statified.mediaPlayer?.release()
             }
             (mContext as FragmentActivity).supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
-                    .commit()
+                .beginTransaction()
+                .replace(R.id.details_fragment, songPlayingFragment, "SongPlayingFragment")
+                .commit()
         })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent?.context)
-                .inflate(R.layout.row_custom_mainscreen_adapter, parent, false)
+            .inflate(R.layout.row_custom_mainscreen_adapter, parent, false)
 
         return MyViewHolder(itemView)
     }
+
     override fun getItemCount(): Int {
         if (songDetails == null) {
             return 0
-        }else {
+        } else {
             return (songDetails as ArrayList<Songs>).size
         }
     }

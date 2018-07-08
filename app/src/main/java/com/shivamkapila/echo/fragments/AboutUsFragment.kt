@@ -26,9 +26,9 @@ class AboutUsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view =  inflater!!.inflate(R.layout.fragment_about_us, container, false)
+        val view = inflater!!.inflate(R.layout.fragment_about_us, container, false)
         activity.title = "About Us"
-        image =view?.findViewById(R.id.info_icon)
+        image = view?.findViewById(R.id.info_icon)
         about = view?.findViewById(R.id.info_about)
         version = view?.findViewById(R.id.appVersion)
         return view
@@ -38,6 +38,7 @@ class AboutUsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         menu?.clear()
         inflater?.inflate(R.menu.menu_blank, menu)

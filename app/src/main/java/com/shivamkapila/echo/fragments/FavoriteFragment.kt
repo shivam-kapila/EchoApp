@@ -150,14 +150,14 @@ class FavoriteFragment : Fragment() {
             args.putString("songArtist", SongPlayingFragment.Statified.currentSongHelper?.songArtist)
             args.putString("path", SongPlayingFragment.Statified.currentSongHelper?.songPath)
             args.putString("songTitle", SongPlayingFragment.Statified.currentSongHelper?.songTitle)
-            args.putInt("SongId", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
+            args.putInt("songId", SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int)
             args.putInt("songPosition", SongPlayingFragment.Statified.currentSongHelper?.currentPosition?.toInt() as Int)
             args.putParcelableArrayList("songData", SongPlayingFragment.Statified.fetchSongs)
             args.putString("FavBottomBar", "success")
             songPlayingFragment.arguments = args
             fragmentManager.beginTransaction()
-                    .replace(R.id.details_fragment, songPlayingFragment)
-                    .commit()
+                .replace(R.id.details_fragment, songPlayingFragment)
+                .commit()
         })
 
         playPauseButton?.setOnClickListener({

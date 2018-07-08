@@ -10,7 +10,6 @@ import android.widget.Switch
 import com.shivamkapila.echo.R
 
 
-
 /**
  * A simple [Fragment] subclass.
  *
@@ -18,6 +17,7 @@ import com.shivamkapila.echo.R
 class SettingsFragment : Fragment() {
     var myActivity: Activity? = null
     var shakeSwitch: Switch? = null
+
     object Statified {
         var MY_PREFS_NAME = "ShakeFeature"
     }
@@ -52,7 +52,7 @@ class SettingsFragment : Fragment() {
         var isAllowed = prefs?.getBoolean("feature", false)
         if (isAllowed as Boolean) {
             shakeSwitch?.isChecked = true
-        }else{
+        } else {
             shakeSwitch?.isChecked = false
         }
 
@@ -61,7 +61,7 @@ class SettingsFragment : Fragment() {
                 val editor = myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)?.edit()
                 editor?.putBoolean("feature", true)
                 editor?.apply()
-            }else{
+            } else {
                 val editor = myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)?.edit()
                 editor?.putBoolean("feature", false)
                 editor?.apply()

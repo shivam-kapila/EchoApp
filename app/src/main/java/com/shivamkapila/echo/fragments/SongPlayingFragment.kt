@@ -67,9 +67,9 @@ class SongPlayingFragment : Fragment() {
                 try {
                     val getCurrent = Statified.mediaPlayer?.getCurrentPosition()
                     startTimeNext?.setText(String.format("%02d:%02d",
-                            TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long),
-                            TimeUnit.MILLISECONDS.toSeconds(getCurrent?.toLong() as Long) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long))))
+                        TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long),
+                        TimeUnit.MILLISECONDS.toSeconds(getCurrent?.toLong() as Long) -
+                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(getCurrent?.toLong() as Long))))
 
                     seekbar?.setProgress(getCurrent?.toInt() as Int)
                     Statified.check = true
@@ -154,14 +154,14 @@ class SongPlayingFragment : Fragment() {
             val startTime = mediaPlayer.currentPosition
             Statified.seekbar?.max = finalTime
             Statified.startTimeNext?.setText(String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(startTime.toLong()),
-                    TimeUnit.MILLISECONDS.toSeconds(startTime.toLong()) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime.toLong()))))
+                TimeUnit.MILLISECONDS.toMinutes(startTime.toLong()),
+                TimeUnit.MILLISECONDS.toSeconds(startTime.toLong()) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(startTime.toLong()))))
 
             Statified.endTimeNext?.setText(String.format("%02d:%02d",
-                    TimeUnit.MILLISECONDS.toMinutes(finalTime.toLong()),
-                    TimeUnit.MILLISECONDS.toSeconds(finalTime.toLong()) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime.toLong()))))
+                TimeUnit.MILLISECONDS.toMinutes(finalTime.toLong()),
+                TimeUnit.MILLISECONDS.toSeconds(finalTime.toLong()) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(finalTime.toLong()))))
 
             Statified.seekbar?.setProgress(startTime)
             Handler().postDelayed(Statified.updateSongTime, 1000)
@@ -277,7 +277,7 @@ class SongPlayingFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_song_playing, container, false)
-        MainActivity.Statified.IS_MUSIC_SCREEN =true
+        MainActivity.Statified.IS_MUSIC_SCREEN = true
         setHasOptionsMenu(true)
 
         activity.title = "Now Playing"
@@ -321,7 +321,7 @@ class SongPlayingFragment : Fragment() {
         super.onResume()
         Statified.audioVisualization?.onResume()
         Statified.mSensorManager?.registerListener(Statified.mSensorListener, Statified.mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL)
+            SensorManager.SENSOR_DELAY_NORMAL)
 
     }
 
@@ -365,7 +365,7 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.songArtist = _songArtist
             Statified.currentSongHelper?.songId = songId
             Statified.currentSongHelper?.currentPosition = Statified._currentPosition
-            println(Statified.currentSongHelper?.songId)
+
             fromFavBottomBar = arguments.get("FavBottomBar") as? String
             fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
 
@@ -380,13 +380,14 @@ class SongPlayingFragment : Fragment() {
             Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
             if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
-                println("yesss")
+
             } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
-                println("noooooo")
             }
         } else if (fromMainScreenBottomBar != null) {
             Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
+
+
             Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
             if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
@@ -499,17 +500,17 @@ class SongPlayingFragment : Fragment() {
                 if (pos == 1) {
                     val mainScreenFragment = MainScreenFragment()
                     (context as MainActivity).supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.details_fragment, mainScreenFragment)
-                            .commit()
+                        .beginTransaction()
+                        .replace(R.id.details_fragment, mainScreenFragment)
+                        .commit()
                 }
 
                 if (pos == 0) {
                     val favoriteFragment = FavoriteFragment()
                     (context as MainActivity).supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.details_fragment, favoriteFragment)
-                            .commit()
+                        .beginTransaction()
+                        .replace(R.id.details_fragment, favoriteFragment)
+                        .commit()
                 }
                 return false
             }
@@ -529,7 +530,7 @@ class SongPlayingFragment : Fragment() {
             } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
                 Statified.favoriteContent?.storeAsFavorite(Statified.currentSongHelper?.songId?.toInt(), Statified.currentSongHelper?.songArtist,
-                        Statified.currentSongHelper?.songTitle, Statified.currentSongHelper?.songPath)
+                    Statified.currentSongHelper?.songTitle, Statified.currentSongHelper?.songPath)
                 Toast.makeText(Statified.myActivity, "Added to Favorites", Toast.LENGTH_SHORT).show()
 
 
@@ -640,7 +641,7 @@ class SongPlayingFragment : Fragment() {
                     val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
                     val isAllowed = prefs?.getBoolean("feature", false)
                     if (isAllowed as Boolean && Statified.check == true) {
-                        println("Shake")
+
                         Statified.currentSongHelper?.isPlaying = true
                         if (Statified.currentSongHelper?.isLoop as Boolean) {
                             Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
@@ -651,9 +652,8 @@ class SongPlayingFragment : Fragment() {
                             Staticated.playNext("PlayNextNormal")
                         }
                         Statified.check = false
-                    }
-                    else{
-                        println("Naah")
+                    } else {
+
                     }
                 }
             }
