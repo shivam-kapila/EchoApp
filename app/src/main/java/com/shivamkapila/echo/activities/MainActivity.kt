@@ -27,6 +27,7 @@ open class MainActivity : AppCompatActivity() {
     object Statified {
         var drawerLayout: DrawerLayout? = null
         var notificationManager: NotificationManager? = null
+        var IS_MUSIC_SCREEN = false
 
     }
 
@@ -53,9 +54,9 @@ open class MainActivity : AppCompatActivity() {
 
         val mainScreenFragment = MainScreenFragment()
         this.supportFragmentManager
-                .beginTransaction()
-                .add(R.id.details_fragment, mainScreenFragment, "MainScreenFragment")
-                .commit()
+            .beginTransaction()
+            .add(R.id.details_fragment, mainScreenFragment, "MainScreenFragment")
+            .commit()
 
         val _navigationAdapter = NavigationDrawerAdapter(navigationDrawerIconsList, images_for_navdrawer, this)
         _navigationAdapter.notifyDataSetChanged()
@@ -68,14 +69,14 @@ open class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this@MainActivity, MainActivity::class.java)
         val pIntent = PendingIntent.getActivity(this@MainActivity, System.currentTimeMillis().toInt(),
-                intent, 0)
+            intent, 0)
         trackNotificationBuilder = Notification.Builder(this)
-                .setContentTitle("A track is playing in background")
-                .setSmallIcon(R.drawable.echo_icon)
-                .setContentIntent(pIntent)
-                .setOngoing(true)
-                .setAutoCancel(true)
-                .build()
+            .setContentTitle("A track is playing in background")
+            .setSmallIcon(R.drawable.echo_icon)
+            .setContentIntent(pIntent)
+            .setOngoing(true)
+            .setAutoCancel(true)
+            .build()
 
         Statified.notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -124,13 +125,7 @@ open class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val mainScreenFragment = MainScreenFragment()
-        this.supportFragmentManager
-                .beginTransaction()
-                .add(R.id.details_fragment, mainScreenFragment, "MainScreenFragment")
-                .commit()
-        super.onBackPressed()
+        val startAct = Intent(this, MainActivity::class.java)
+        startActivity(startAct)
     }
-
-
 }

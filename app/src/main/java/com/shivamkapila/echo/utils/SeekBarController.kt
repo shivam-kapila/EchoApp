@@ -1,6 +1,7 @@
 package com.shivamkapila.echo.utils
 
 import android.widget.SeekBar
+import com.shivamkapila.echo.activities.MainActivity
 import com.shivamkapila.echo.fragments.SongPlayingFragment
 
 class SeekBarController : SeekBar.OnSeekBarChangeListener {

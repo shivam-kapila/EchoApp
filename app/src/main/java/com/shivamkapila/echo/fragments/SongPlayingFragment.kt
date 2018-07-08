@@ -277,7 +277,7 @@ class SongPlayingFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater!!.inflate(R.layout.fragment_song_playing, container, false)
-
+        MainActivity.Statified.IS_MUSIC_SCREEN =true
         setHasOptionsMenu(true)
 
         activity.title = "Now Playing"
@@ -378,10 +378,19 @@ class SongPlayingFragment : Fragment() {
         if (fromFavBottomBar != null) {
             Statified.mediaPlayer = FavoriteFragment.Statified.mediaPlayer
             Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
+                Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
+            } else {
+                Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
+            }
         } else if (fromMainScreenBottomBar != null) {
             Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
             Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
-
+            if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
+                Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
+            } else {
+                Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
+            }
         } else {
             Statified.mediaPlayer = MediaPlayer()
             Statified.mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)

@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
 import com.shivamkapila.echo.R
-import com.shivamkapila.echo.activities.MainActivity
+import com.shivamkapila.echo.activities. MainActivity
 import com.shivamkapila.echo.fragments.SongPlayingFragment
 
 class CaptureBroadcast : BroadcastReceiver() {

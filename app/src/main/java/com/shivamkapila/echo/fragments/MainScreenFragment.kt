@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -192,6 +193,7 @@ class MainScreenFragment : Fragment() {
             fragmentManager.beginTransaction()
                     .replace(R.id.details_fragment, songPlayingFragment)
                     .commit()
+
         })
 
         playPauseButton?.setOnClickListener({
@@ -206,6 +208,12 @@ class MainScreenFragment : Fragment() {
                 playPauseButton?.setBackgroundResource(R.drawable.pause_icon)
             }
         })
+        if (SongPlayingFragment.Statified.favoriteContent?.checkifIdExists(SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
+            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_on))
+        } else {
+            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_off))
+
+        }
     }
 
 
