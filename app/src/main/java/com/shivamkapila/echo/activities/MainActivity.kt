@@ -20,6 +20,7 @@ import com.shivamkapila.echo.adapters.NavigationDrawerAdapter
 import com.shivamkapila.echo.fragments.MainScreenFragment
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.view.KeyEvent
 import com.shivamkapila.echo.fragments.FavoriteFragment
 import com.shivamkapila.echo.fragments.SongPlayingFragment
 
@@ -124,8 +125,20 @@ open class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    override fun onBackPressed() {
-        val startAct = Intent(this, MainActivity::class.java)
-        startActivity(startAct)
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_BACK -> {
+                if (Statified.IS_MUSIC_SCREEN == true) {
+                    val startAct = Intent(this, MainActivity::class.java)
+                    startActivity(startAct)
+                    Statified.IS_MUSIC_SCREEN = false
+                } else {
+                    moveTaskToBack(true)
+                    println("12345")
+                    return true
+                }
+            }
+        }
+        return false
     }
 }

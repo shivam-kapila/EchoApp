@@ -139,10 +139,10 @@ class SongPlayingFragment : Fragment() {
             var songTitleUpdated = songTitle
             var songArtistUpdated = songArtist
             if (songTitle.equals("<unknown>", true)) {
-                songTitleUpdated = "unknown"
+                songTitleUpdated = "Unknown"
             }
             if (songArtist.equals("<unknown>", true)) {
-                songArtistUpdated = "unknown"
+                songArtistUpdated = "Unknown"
             }
             Statified.songTitleView?.setText(songTitleUpdated)
             Statified.songArtistView?.setText(songArtistUpdated)
@@ -365,7 +365,7 @@ class SongPlayingFragment : Fragment() {
             Statified.currentSongHelper?.songArtist = _songArtist
             Statified.currentSongHelper?.songId = songId
             Statified.currentSongHelper?.currentPosition = Statified._currentPosition
-
+            println(Statified.currentSongHelper?.songId)
             fromFavBottomBar = arguments.get("FavBottomBar") as? String
             fromMainScreenBottomBar = arguments.get("MainScreenBottomBar") as? String
 
@@ -380,8 +380,10 @@ class SongPlayingFragment : Fragment() {
             Staticated.processInformation(Statified.mediaPlayer as MediaPlayer)
             if (Statified.favoriteContent?.checkifIdExists(Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_on))
+                println("yesss")
             } else {
                 Statified.fab?.setImageDrawable(ContextCompat.getDrawable(Statified.myActivity, R.drawable.favorite_off))
+                println("noooooo")
             }
         } else if (fromMainScreenBottomBar != null) {
             Statified.mediaPlayer = MainScreenFragment.Statified.mediaPlayer
@@ -635,10 +637,10 @@ class SongPlayingFragment : Fragment() {
                 val delta = mAccelerationCurrent - mAccelerationLast
                 mAcceleration = mAcceleration * 0.9f + delta
                 if (mAcceleration > 12) {
-                    println("11111")
                     val prefs = Statified.myActivity?.getSharedPreferences(Statified.MY_PREFS_NAME, Context.MODE_PRIVATE)
                     val isAllowed = prefs?.getBoolean("feature", false)
                     if (isAllowed as Boolean && Statified.check == true) {
+                        println("Shake")
                         Statified.currentSongHelper?.isPlaying = true
                         if (Statified.currentSongHelper?.isLoop as Boolean) {
                             Statified.loopImageButton?.setBackgroundResource(R.drawable.loop_white_icon)
@@ -649,6 +651,9 @@ class SongPlayingFragment : Fragment() {
                             Staticated.playNext("PlayNextNormal")
                         }
                         Statified.check = false
+                    }
+                    else{
+                        println("Naah")
                     }
                 }
             }

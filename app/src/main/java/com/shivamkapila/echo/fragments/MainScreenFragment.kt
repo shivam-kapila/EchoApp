@@ -198,7 +198,6 @@ class MainScreenFragment : Fragment() {
 
         playPauseButton?.setOnClickListener({
             if (SongPlayingFragment.Statified.mediaPlayer?.isPlaying as Boolean) {
-
                 SongPlayingFragment.Statified.mediaPlayer?.pause()
                 trackPosition = SongPlayingFragment.Statified.mediaPlayer?.currentPosition as Int
                 playPauseButton?.setBackgroundResource(R.drawable.play_icon)
@@ -208,12 +207,6 @@ class MainScreenFragment : Fragment() {
                 playPauseButton?.setBackgroundResource(R.drawable.pause_icon)
             }
         })
-        if (SongPlayingFragment.Statified.favoriteContent?.checkifIdExists(SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_on))
-        } else {
-            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_off))
-
-        }
     }
 
 

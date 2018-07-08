@@ -31,8 +31,16 @@ class MainScreenAdapter(_songDetails: ArrayList<Songs>, _context: Context)
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val songObject = songDetails?.get(position)
-        holder.trackTitle?.text = songObject?.songTitle
-        holder.trackArtist?.text = songObject?.artist
+        var songTitleUpdated = songObject?.songTitle
+        var songArtistUpdated = songObject?.artist
+        if (songObject?.songTitle.equals("<unknown>", true)) {
+            songTitleUpdated = "Unknown"
+        }
+        if (songObject?.artist.equals("<unknown>", true)) {
+            songArtistUpdated = "Unknown"
+        }
+        holder.trackTitle?.text = songTitleUpdated
+        holder.trackArtist?.text = songArtistUpdated
         holder.contentHolder?.setOnClickListener({
             val songPlayingFragment = SongPlayingFragment()
             var args = Bundle()

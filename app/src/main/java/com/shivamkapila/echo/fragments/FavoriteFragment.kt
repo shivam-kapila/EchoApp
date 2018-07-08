@@ -172,12 +172,7 @@ class FavoriteFragment : Fragment() {
                 playPauseButton?.setBackgroundResource(R.drawable.pause_icon)
             }
         })
-        if (SongPlayingFragment.Statified.favoriteContent?.checkifIdExists(SongPlayingFragment.Statified.currentSongHelper?.songId?.toInt() as Int) as Boolean) {
-            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_on))
-        } else {
-            SongPlayingFragment.Statified.fab?.setImageDrawable(ContextCompat.getDrawable(SongPlayingFragment.Statified.myActivity, R.drawable.favorite_off))
 
-        }
     }
 
     fun display_favorites_by_searching() {
